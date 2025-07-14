@@ -11,7 +11,6 @@ const isMenuOpen = ref<boolean>(false)
 
 interface IMenuItem {
   label: string
-  icon: string
   path: string
   show: ComputedRef<boolean>
   action?: () => Promise<void>
@@ -33,21 +32,18 @@ const menuToggle = () => {
 
 const items = ref<IMenuItem[]>([
   {
-    label: 'Авторизация',
-    icon: 'pi pi-user',
+    label: 'Auth',
     path: '/auth',
     show: computed((): boolean => !userStore.userId),
   },
   {
-    label: 'Главная',
-    icon: 'pi pi-plus',
+    label: 'Home',
     path: '/',
     show: computed((): boolean => !!userStore.userId),
   },
 
   {
-    label: 'Выйти',
-    icon: 'pi pi-sign-out',
+    label: 'Sign Out',
     path: '',
     show: computed((): boolean => !!userStore.userId),
     action: signOutMethod,
@@ -77,7 +73,7 @@ const items = ref<IMenuItem[]>([
       ]"
     >
       <div
-        class="flex flex-col items-center justify-center h-full md:h-auto md:max-w-3xl md:w-full md:flex-row md:gap-4 md:bg-gray-100 md:rounded-xl md:p-4"
+        class="flex flex-col items-center justify-center h-full md:h-auto md:w-full md:flex-row md:gap-4 md:bg-gray-100 md:rounded-xl md:p-4"
       >
         <ul
           class="flex flex-col items-center justify-center gap-4 md:flex-row md:gap-2 w-full max-w-md md:max-w-none"

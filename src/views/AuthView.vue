@@ -25,26 +25,26 @@ const isLoading = ref<boolean>(false)
 const isEmail = ref<boolean>(false)
 
 const subtitleText = computed<string>(() => {
-  return isLogin.value ? 'Аккаунта еще нет?' : 'Уже есть аккаунт?'
+  return isLogin.value ? "Don't have an account?" : 'Already have an account?'
 })
 
 const linkAccountText = computed<string>(() => {
-  return isLogin.value ? 'Создайте сейчас' : 'Войдите в него'
+  return isLogin.value ? 'Create one now' : 'Sign in'
 })
 
 const submitButtonText = computed<string>(() => {
-  return isLogin.value ? 'Вход' : 'Регистрация'
+  return isLogin.value ? 'Sign In' : 'Sign Up'
 })
 
 const toggleAuth = () => (isLogin.value = !isLogin.value)
 
 const validateForm = (): boolean => {
   if (!email.value || !password.value) {
-    openNotification('Заполните все поля')
+    openNotification('Please fill in all fields')
     return false
   }
   if (password.value.length < 6) {
-    openNotification('Пароль должен содержать не менее 6 символов')
+    openNotification('Password must be at least 6 characters long')
     return false
   }
   return true
@@ -56,7 +56,7 @@ const submitFormEmail = async (): Promise<void> => {
 
   try {
     const auth = getAuth()
-    auth.languageCode = 'ru'
+    auth.languageCode = 'en'
     if (isLogin.value) {
       await signInWithEmailAndPassword(auth, email.value, password.value)
     } else {
@@ -84,9 +84,8 @@ const submitFormGoogle = async (): Promise<void> => {
 
   try {
     const auth = getAuth()
-    auth.languageCode = 'ru'
+    auth.languageCode = 'en'
     await signInWithPopup(auth, provider)
-
     router.push('/home')
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -99,96 +98,102 @@ const submitFormGoogle = async (): Promise<void> => {
 </script>
 
 <template>
-  <transition>
+  <transition name="fade">
     <AppNotificationError v-if="isNotificationOpen" :message="errorMessage" />
   </transition>
 
-  <div class=" ">
+  <div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-100 flex items-center justify-center p-4">
     <AppLoader v-if="isLoading" />
 
-    <main class="mt-30" v-else>
-      <div class="flex flex-col mx-auto items-center justify-center">
-        <div class="flex flex-col items-center pb-6">
-          <h3 class="pb-5 md:text-[5rem] text-[2.5rem]">
-            <span class="text-blue-500">Auth</span>Firebase
+    <main v-else class="w-full max-w-md">
+      <div class="bg-white rounded-2xl shadow-xl p-8 transform transition-all duration-300 hover:shadow-2xl">
+        <div class="text-center mb-8">
+          <h3 class="text-4xl font-bold tracking-tight">
+            <span class="text-blue-600">Auth</span>Firebase
           </h3>
-          <div class="flex flex-col items-center select-none" v-if="isEmail">
-            <span class="mr-2 md:text-[1.5rem] text-xl text-gray-500">{{ subtitleText }}</span>
-            <span
-              class="text-blue-400 md:text-[1.5rem] text-xl cursor-pointer"
-              @click="toggleAuth"
-              >{{ linkAccountText }}</span
-            >
-          </div>
-          <div class="flex flex-col items-center" v-if="!isEmail">
-            <span class="md:text-[2rem] text-[1.5rem]">Приветствую!</span>
-            <span class="my-5 text-[1.5rem]">Вход с помощью:</span>
-          </div>
+          <p v-if="!isEmail" class="text-gray-600 mt-2 text-lg">Welcome! Choose your sign-in method:</p>
         </div>
 
-        <form
-          @submit.prevent=""
-          class="flex flex-col items-center md:w-[25vw] lg:w-[30vw] px-10"
-          v-if="isEmail"
-        >
-          <div class="flex flex-col mb-5 w-full">
-            <label for="email1 ">Email</label>
-            <input
-              v-model="email"
-              type="email"
-              id="email1"
-              class="border-1 border-gray-300 p-2 outline-none rounded-md mb-5"
-            />
+        <div v-if="isEmail" class="space-y-6">
+          <div class="text-center text-gray-500">
+            <span>{{ subtitleText }}</span>
+            <button
+              class="text-blue-600 hover:text-blue-800 font-medium ml-2 transition-colors"
+              @click="toggleAuth"
+            >
+              {{ linkAccountText }}
+            </button>
           </div>
 
-          <div class="flex flex-col mb-5 w-full">
-            <label for="password1 ">Пароль</label>
-            <input
-              v-model="password"
-              type="password"
-              id="password1"
-              class="border-1 border-gray-300 p-2 outline-none rounded-md mb-5"
-            />
-          </div>
+          <form @submit.prevent="submitFormEmail" class="space-y-4">
+            <div>
+              <label for="email1" class="block text-sm font-medium text-gray-700">Email</label>
+              <input
+                v-model="email"
+                type="email"
+                id="email1"
+                class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                placeholder="Enter your email"
+              />
+            </div>
 
-          <div
-            @click="submitFormEmail"
-            class="flex items-center justify-between bg-blue-500 text-white h-12 w-full py-1 px-3 rounded-full mb-5 cursor-pointer hover:bg-blue-600"
-          >
-            <span class="pi pi-user"></span>
+            <div>
+              <label for="password1" class="block text-sm font-medium text-gray-700">Password</label>
+              <input
+                v-model="password"
+                type="password"
+                id="password1"
+                class="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                placeholder="Enter your password"
+              />
+            </div>
 
-            <button>{{ submitButtonText }}</button>
-            <span></span>
-          </div>
+            <button
+              type="submit"
+              class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+            >
+              <span class="pi pi-user"></span>
+              <span>{{ submitButtonText }}</span>
+            </button>
 
-          <div
-            @click="goBack"
-            class="flex items-center justify-between bg-gray-500 text-white h-12 w-full py-1 px-3 rounded-full mb-5 cursor-pointer hover:bg-gray-600"
-          >
-            <span class="pi pi-arrow-left"></span>
-            <span>Назад</span>
-            <span></span>
-          </div>
-        </form>
-        <div v-if="!isEmail" class="md:w-[25vw] w-[60vw]">
-          <div
+            <button
+              @click="goBack"
+              class="w-full bg-gray-200 text-gray-700 py-3 rounded-lg hover:bg-gray-300 transition-colors flex items-center justify-center gap-2"
+            >
+              <span class="pi pi-arrow-left"></span>
+              <span>Back</span>
+            </button>
+          </form>
+        </div>
+
+        <div v-else class="space-y-4">
+          <button
             @click="goEmail"
-            class="flex items-center justify-between bg-blue-500 text-white h-12 py-1 px-3 rounded-md mb-5 cursor-pointer hover:bg-blue-600"
+            class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
           >
             <span class="pi pi-user"></span>
-            <span>Почта | Пароль</span>
-            <span></span>
-          </div>
-          <div
+            <span>Email | Password</span>
+          </button>
+          <button
             @click="submitFormGoogle"
-            class="flex items-center justify-between bg-orange-600 text-white h-12 py-1 px-3 rounded-md mb-5 cursor-pointer hover:bg-orange-700"
+            class="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
           >
             <span class="pi pi-google"></span>
             <span>Google</span>
-            <span></span>
-          </div>
+          </button>
         </div>
       </div>
     </main>
   </div>
 </template>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

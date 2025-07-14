@@ -15,7 +15,7 @@ defineEmits<{
   >
     <div class="flex justify-between items-start">
       <div>
-        <h3 class="text-lg font-semibold">Ошибка</h3>
+        <h3 class="text-lg font-semibold">Error</h3>
         <p class="text-sm mt-1">{{ message }}</p>
       </div>
       <button
@@ -41,7 +41,6 @@ defineEmits<{
 </template>
 
 <style scoped>
-/* Анимация выезда справа */
 .animate-slide-in {
   animation: slideIn 0.3s ease-out;
 }
@@ -56,8 +55,6 @@ defineEmits<{
     transform: translateX(0);
   }
 }
-
-/* Анимация для Vue Transition */
 .v-enter-active,
 .v-leave-active {
   transition: all 0.3s ease;

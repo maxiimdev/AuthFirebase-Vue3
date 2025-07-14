@@ -23,7 +23,7 @@ onMounted(() => {
 
 <template>
   <AppLoader v-if="isLoading" />
-  <div v-else class="w-[90%] mx-auto mt-5">
+  <div v-else>
     <Header />
 
     <RouterView />

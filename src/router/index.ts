@@ -13,10 +13,8 @@ const checkAuth = (
 ) => {
   onAuthStateChanged(getAuth(), (user) => {
     if (user) {
-      // Пользователь авторизован, разрешаем доступ к защищённым маршрутам
       next()
     } else {
-      // Пользователь не авторизован, перенаправляем на /auth
       next('/auth')
     }
   })
@@ -25,7 +23,7 @@ const checkAuth = (
 const routes = [
   {
     path: '/',
-    redirect: '/home', // Перенаправляем корневой маршрут на лендинг
+    redirect: '/home',
   },
   {
     path: '/home',
