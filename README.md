@@ -1,4 +1,4 @@
-# auth | Vue 3 + TS + Firebase + pinia + tailwind css
+# Auth | Vue 3 + TS + Firebase + Pinia + Tailwind CSS
 
 Simple auntification, available at:
 1. mail + password
